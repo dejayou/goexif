@@ -88,11 +88,11 @@ func DecodeTag(r ReadAtReader, order binary.ByteOrder) (*Tag, error) {
 		return nil, errors.New("tiff: tag component count read failed: " + err.Error())
 	}
 
+	valLen := typeSize[t.Type] * t.Count
 	if valLen < tagLengthCutoff {
 		return nil, errors.New(fmt.Sprintf("tiff: tag value length too large: %d > %d (cutoff)", valLen, tagLengthCutoff))
 	}
 
-	valLen := typeSize[t.Type] * t.Count
 	var offset uint32
 	if valLen > 4 {
 		binary.Read(r, order, &offset)
